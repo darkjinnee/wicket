@@ -3,7 +3,13 @@
 namespace Darkjinnee\Wicket;
 
 use Illuminate\Support\ServiceProvider;
+use Darkjinnee\Wicket\Models\PersonalAccessToken;
+use Laravel\Sanctum\Sanctum;
 
+/**
+ * Class WicketServiceProvider
+ * @package Darkjinnee\Wicket
+ */
 class WicketServiceProvider extends ServiceProvider
 {
     /**
@@ -13,6 +19,7 @@ class WicketServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'darkjinnee');
         // $this->loadViewsFrom(__DIR__.'/../resources/views', 'darkjinnee');
          $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
@@ -34,7 +41,7 @@ class WicketServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/wicket.php', 'wicket');
 
         // Register the service the package provides.
-        $this->app->singleton('wicket', function ($app) {
+        $this->app->singleton('wicket', function () {
             return new Wicket;
         });
     }
@@ -44,7 +51,7 @@ class WicketServiceProvider extends ServiceProvider
      *
      * @return array
      */
-    public function provides()
+    public function provides(): array
     {
         return ['wicket'];
     }
